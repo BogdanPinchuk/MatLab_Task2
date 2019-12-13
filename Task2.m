@@ -21,6 +21,9 @@ picture = imread('picture.jpg');
 % for help
 % 2013 - Evaluation of Major Factors Affecting Spatial Resolution of Gamma-Rays Camera
 % http://dx.doi.org/10.4236/jasmi.2013.34029
+% 2009 - Comparison of different analytical edge spread function models
+% for MTF calculation using curve-fitting
+% DOI: 10.1117/12.832793
 
 % dapic - data of picture
 
@@ -63,28 +66,20 @@ clear dapic i;
 % довжини хвилі на МПФ, треба досліджувати...
 % data = GetColorComponent(picture(dapic{i, 2}(1, 1) : dapic{i, 2}(2, 1),...
 %     dapic{i, 2}(1, 2) : dapic{i, 2}(2, 2), :), 'AM');
+
+% comR = CenterOfMassOne(dataR);
+% comG = CenterOfMassOne(dataG);
+% comB = CenterOfMassOne(dataB);
+
+
 % figure(1);
+% data = rot90(dataR, 2);
+% % data = dataR;
+% hold off;
 % imshow(data);
-% figure(1);
-% imshow(dataR);
-% figure(2);
-% imshow(rot90(dataR));
-% figure(3);
-% imshow(rot90(dataR, -1));
-
-figure(1);
-data = rot90(dataR, 2);
-% data = dataR;
-hold off;
-imshow(data);
-% image(data);
-
-COM = CenterOfMassOne(data);
-% COM = CenterOfMass(data, 'h');
-% COM = CenterOfMass(data, 'v');
-hold on;
-plot(COM(1, :), COM(2, :));
-% plot(COM(2, :), COM(1, :));
+% % image(data);
+% hold on;
+% plot(COM(1, :), COM(2, :), 'LineWidth', 2);
 
 
 
