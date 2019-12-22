@@ -1,12 +1,16 @@
-function [center] = CenterOfMass(data)
+function [center] = CenterOfMassOne(data)
 % Центр мас зображення
 % data - частина даних зображення
 
 % for warning
 str = 'Input format of component is failed.';
 
-% заноходимо похідну
-data = abs(diff(double(data), 1, 2));
+% заноходимо похідну (так краще виділяє сходинку)
+if (size(data, 1) > size(data,  2))
+    data = abs(diff(double(data), 1, 2));
+else
+    data = abs(diff(double(data)));
+end
 
 % якщо шум становить 25% від максималного значення
 noise = 0.25 * max(max(data));

@@ -47,15 +47,15 @@ clear height width chanels;
 % image(patcher0);
 
 % находимо центр мас для рожного із рядків
-i = 2;
+i = 1;
 dataR = picture(dapic{i, 2}(1, 1) : dapic{i, 2}(2, 1),...
     dapic{i, 2}(1, 2) : dapic{i, 2}(2, 2), 1);
-dataG = picture(dapic{i, 2}(1, 1) : dapic{i, 2}(2, 1),...
-    dapic{i, 2}(1, 2) : dapic{i, 2}(2, 2), 2);
-dataB = picture(dapic{i, 2}(1, 1) : dapic{i, 2}(2, 1),...
-    dapic{i, 2}(1, 2) : dapic{i, 2}(2, 2), 3);
+% dataG = picture(dapic{i, 2}(1, 1) : dapic{i, 2}(2, 1),...
+%     dapic{i, 2}(1, 2) : dapic{i, 2}(2, 2), 2);
+% dataB = picture(dapic{i, 2}(1, 1) : dapic{i, 2}(2, 1),...
+%     dapic{i, 2}(1, 2) : dapic{i, 2}(2, 2), 3);
 
-clear dapic i;
+clear dapic;
 
 % зазвичай в зображеннях створених вручну, RGB комоненти по інтенсивності
 % рівні, але так як знімала реальна камера, то можливі варіації (вплив
@@ -63,23 +63,33 @@ clear dapic i;
 % значення - наприклад, середнє аврифметичне і т.д.
 % але можна обрахувати і порівняти 3 компоненти між собою, що покаже як
 % впливає на результуюче зображення кожен із фільтів, або покаже вплив
-% довжини хвилі на МПФ, треба досліджувати...
+% довжини хвилі на МПФ, дана тема потребує дослідження...
 % data = GetColorComponent(picture(dapic{i, 2}(1, 1) : dapic{i, 2}(2, 1),...
 %     dapic{i, 2}(1, 2) : dapic{i, 2}(2, 2), :), 'AM');
 
-% comR = CenterOfMassOne(dataR);
-% comG = CenterOfMassOne(dataG);
-% comB = CenterOfMassOne(dataB);
+if (i == 1)
+    direction = 'h';
+else
+    direction = 'v';
+end
 
+comR = CenterOfMass(dataR, direction);
+% comG = CenterOfMass(dataG, direction);
+% comB = CenterOfMass(dataB, direction);
+
+clear i;
 
 % figure(1);
-% data = rot90(dataR, 2);
-% % data = dataR;
+% % data = rot90(dataR, 2);
+% data = dataR;
 % hold off;
 % imshow(data);
 % % image(data);
 % hold on;
-% plot(COM(1, :), COM(2, :), 'LineWidth', 2);
+% plot(comR(1, :), comR(2, :), 'LineWidth', 2);
+
+% Знаходимо крайову функцію
+GetESF(dataR, comR, direction, 20);
 
 
 
