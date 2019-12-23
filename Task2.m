@@ -119,47 +119,47 @@ LSF_Rv = diff(ESF_Rv);
 LSF_Gv = diff(ESF_Gv);
 LSF_Bv = diff(ESF_Bv);
 
+% Розраховуємо MTF - модуляційну передавальну функцію
+% 2006 - Гонсалес Р., Вудс Р., Эддинс С. Цифровая обработка изображений в среде MATLAB
+MTF_Rh = abs(fft(LSF_Rh));
+
+f = 1 : fix(size(MTF_Rh, 2)/ 2) + 1;
+plot(f - 1, MTF_Rh(f));
+
 % Graphics - present result
 
-% Горизонтальний патерн
-figure('Name','Calculate MTF for R chanel and horizontal',...
-    'NumberTitle','off');
-PresentInfo(dataRh, comRh, ESF_Rh, ESFarray_Rh, LSF_Rh);
-figure('Name','Calculate MTF for G chanel and horizontal',...
-    'NumberTitle','off');
-PresentInfo(dataGh, comGh, ESF_Gh, ESFarray_Gh, LSF_Gh);
-figure('Name','Calculate MTF for B chanel and horizontal',...
-    'NumberTitle','off');
-PresentInfo(dataBh, comBh, ESF_Bh, ESFarray_Bh, LSF_Bh);
-
-% Вертикальний патерн
-figure('Name','Calculate MTF for R chanel and vertical',...
-    'NumberTitle','off');
-PresentInfo(dataRv, comRv, ESF_Rv, ESFarray_Rv, LSF_Rv);
-figure('Name','Calculate MTF for G chanel and vertical',...
-    'NumberTitle','off');
-PresentInfo(dataGv, comGv, ESF_Gv, ESFarray_Gv, LSF_Gv);
-figure('Name','Calculate MTF for B chanel and vertical',...
-    'NumberTitle','off');
-PresentInfo(dataBv, comBv, ESF_Bv, ESFarray_Bv, LSF_Bv);
-
-% Present different beatween chanels
-% figure(1);
-% hold on;
-% plot(ESF_R);
-% plot(ESF_G);
-% plot(ESF_B);
+% % Горизонтальний патерн
+% figure('Name','Calculate MTF for R chanel and horizontal',...
+%     'NumberTitle','off');
+% PresentInfo(dataRh, comRh, ESF_Rh, ESFarray_Rh, LSF_Rh);
+% figure('Name','Calculate MTF for G chanel and horizontal',...
+%     'NumberTitle','off');
+% PresentInfo(dataGh, comGh, ESF_Gh, ESFarray_Gh, LSF_Gh);
+% figure('Name','Calculate MTF for B chanel and horizontal',...
+%     'NumberTitle','off');
+% PresentInfo(dataBh, comBh, ESF_Bh, ESFarray_Bh, LSF_Bh);
 % 
-% figure(2);
-% hold on;
-% plot(LSF_R);
-% plot(LSF_G);
-% plot(LSF_B);
+% % Вертикальний патерн
+% figure('Name','Calculate MTF for R chanel and vertical',...
+%     'NumberTitle','off');
+% PresentInfo(dataRv, comRv, ESF_Rv, ESFarray_Rv, LSF_Rv);
+% figure('Name','Calculate MTF for G chanel and vertical',...
+%     'NumberTitle','off');
+% PresentInfo(dataGv, comGv, ESF_Gv, ESFarray_Gv, LSF_Gv);
+% figure('Name','Calculate MTF for B chanel and vertical',...
+%     'NumberTitle','off');
+% PresentInfo(dataBv, comBv, ESF_Bv, ESFarray_Bv, LSF_Bv);
+
+% Present different between chanels
+% Це можна представити у вигляді 3-х кривих на одному графіку, але краще
+% показати це через відхилення
+% PresentDiff(ESF_Rh, ESF_Gh, ESF_Bh, ESF_Rv, ESF_Gv, ESF_Bv,...
+%     LSF_Rh, LSF_Gh, LSF_Bh, LSF_Rv, LSF_Gv, LSF_Bv);
 
 clear direction dataRh dataGh dataBh dataRv dataGv dataBv comRh comGh comBh...
     comRv comGv comBv ESFarray_Rh ESFarray_Gh ESFarray_Bh ESFarray_Rv...
     ESFarray_Gv ESFarray_Bv capacity_Rh capacity_Gh capacity_Bh...
     capacity_Rv capacity_Gv capacity_Bv; 
 
-clear ESF_Rh ESF_Gh ESF_Bh ESF_Rv ESF_Gv ESF_Bv...
-    LSF_Rh LSF_Gh LSF_Bh LSF_Rv LSF_Gv LSF_Bv 
+% clear ESF_Rh ESF_Gh ESF_Bh ESF_Rv ESF_Gv ESF_Bv...
+%     LSF_Rh LSF_Gh LSF_Bh LSF_Rv LSF_Gv LSF_Bv 

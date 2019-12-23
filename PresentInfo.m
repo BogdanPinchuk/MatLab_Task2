@@ -52,7 +52,5 @@ title('LSF');
 xlabel('Pixels');
 ylabel('Intensity');
 
-
-
 end
 
