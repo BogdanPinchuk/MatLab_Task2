@@ -47,7 +47,7 @@ clear height width chanels;
 % image(patcher0);
 
 % находимо центр мас дл€ рожного ≥з р€дк≥в
-i = 1;
+i = 2;
 dataR = picture(dapic{i, 2}(1, 1) : dapic{i, 2}(2, 1),...
     dapic{i, 2}(1, 2) : dapic{i, 2}(2, 2), 1);
 % dataG = picture(dapic{i, 2}(1, 1) : dapic{i, 2}(2, 1),...
@@ -88,9 +88,12 @@ clear i;
 % hold on;
 % plot(comR(1, :), comR(2, :), 'LineWidth', 2);
 
+% знаходимо необх≥дну емн≥сть - к≥льк≥сть п≥ксел≥в за €ими можна описати
+% ESF (крайову функц≥ю)
+
 % «находимо крайову функц≥ю
-GetESF(dataR, comR, direction, 20);
+ESF = GetESF(dataR, comR, direction, GetLength(dataR, direction, 25, 3));
 
-
+clear direction comR dataR;
 
 

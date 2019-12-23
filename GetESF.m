@@ -26,12 +26,6 @@ elseif ~isnumeric(direction)
     return;
 end
 
-% % test, then delete this
-% direction = 0;
-% length = 20;
-% center = comR;
-% data = dataR;
-
 % масив із набору ESF в кожному рядку
 array = zeros(size(center, 2), length);
 
@@ -55,14 +49,14 @@ end
 ESF = mean(array);
 
 % for analysis information
-% figure(2);
-% clf;
-% hold on;
-% for i = 1 : size(array, 1)
-%     plot(array(i, :), '.');
-%     pause(1/250);
-% end
-% plot(array(i, :), 'LineWidth', 3);
+figure(1);
+clf;
+hold on;
+for i = 1 : size(array, 1)
+    plot(array(i, :), '.');
+    pause(1/250);
+end
+plot(array(i, :), 'LineWidth', 3);
 
 end
 
