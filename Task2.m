@@ -24,6 +24,7 @@ picture = imread('picture.jpg');
 % 2009 - Comparison of different analytical edge spread function models
 % for MTF calculation using curve-fitting
 % DOI: 10.1117/12.832793
+% https://en.wikipedia.org/wiki/Optical_transfer_function
 
 % dapic - data of picture
 
@@ -47,15 +48,23 @@ clear height width chanels;
 % image(patcher0);
 
 % находимо центр мас для рожного із рядків
-i = 2;
-dataR = picture(dapic{i, 2}(1, 1) : dapic{i, 2}(2, 1),...
-    dapic{i, 2}(1, 2) : dapic{i, 2}(2, 2), 1);
-% dataG = picture(dapic{i, 2}(1, 1) : dapic{i, 2}(2, 1),...
-%     dapic{i, 2}(1, 2) : dapic{i, 2}(2, 2), 2);
-% dataB = picture(dapic{i, 2}(1, 1) : dapic{i, 2}(2, 1),...
-%     dapic{i, 2}(1, 2) : dapic{i, 2}(2, 2), 3);
+i = 1;
+% для горизонтального шаблону
+data = picture(dapic{i, 2}(1, 1) : dapic{i, 2}(2, 1),...
+    dapic{i, 2}(1, 2) : dapic{i, 2}(2, 2), :);
+dataRh = data(:, :, 1);
+dataGh = data(:, :, 2);
+dataBh = data(:, :, 3);
 
-clear dapic;
+i = 2;
+% для вертикального шаблону
+data = picture(dapic{i, 2}(1, 1) : dapic{i, 2}(2, 1),...
+    dapic{i, 2}(1, 2) : dapic{i, 2}(2, 2), :);
+dataRv = data(:, :, 1);
+dataGv = data(:, :, 2);
+dataBv = data(:, :, 3);
+
+clear dapic data i;
 
 % зазвичай в зображеннях створених вручну, RGB комоненти по інтенсивності
 % рівні, але так як знімала реальна камера, то можливі варіації (вплив
@@ -67,33 +76,90 @@ clear dapic;
 % data = GetColorComponent(picture(dapic{i, 2}(1, 1) : dapic{i, 2}(2, 1),...
 %     dapic{i, 2}(1, 2) : dapic{i, 2}(2, 2), :), 'AM');
 
-if (i == 1)
-    direction = 'h';
-else
-    direction = 'v';
-end
+direction = 'h';
+comRh = CenterOfMass(dataRh, direction);
+comGh = CenterOfMass(dataGh, direction);
+comBh = CenterOfMass(dataBh, direction);
 
-comR = CenterOfMass(dataR, direction);
-% comG = CenterOfMass(dataG, direction);
-% comB = CenterOfMass(dataB, direction);
-
-clear i;
-
-% figure(1);
-% % data = rot90(dataR, 2);
-% data = dataR;
-% hold off;
-% imshow(data);
-% % image(data);
-% hold on;
-% plot(comR(1, :), comR(2, :), 'LineWidth', 2);
+direction = 'v';
+comRv = CenterOfMass(dataRv, direction);
+comGv = CenterOfMass(dataGv, direction);
+comBv = CenterOfMass(dataBv, direction);
 
 % знаходимо необхідну емність - кількість пікселів за яими можна описати
 % ESF (крайову функцію)
+direction = 'h';
+capacity_Rh = GetLength(dataRh, direction, 25, 5);
+capacity_Gh = GetLength(dataGh, direction, 25, 5);
+capacity_Bh = GetLength(dataBh, direction, 25, 5);
+
+direction = 'v';
+capacity_Rv = GetLength(dataRv, direction, 25, 5);
+capacity_Gv = GetLength(dataGv, direction, 25, 5);
+capacity_Bv = GetLength(dataBv, direction, 25, 5);
 
 % Знаходимо крайову функцію
-ESF = GetESF(dataR, comR, direction, GetLength(dataR, direction, 25, 3));
+direction = 'h';
+[ESF_Rh, ESFarray_Rh] = GetESF(dataRh, comRh, direction, capacity_Rh);
+[ESF_Gh, ESFarray_Gh] = GetESF(dataGh, comGh, direction, capacity_Gh);
+[ESF_Bh, ESFarray_Bh] = GetESF(dataBh, comBh, direction, capacity_Bh);
 
-clear direction comR dataR;
+direction = 'v';
+[ESF_Rv, ESFarray_Rv] = GetESF(dataRv, comRv, direction, capacity_Rv);
+[ESF_Gv, ESFarray_Gv] = GetESF(dataGv, comGv, direction, capacity_Gv);
+[ESF_Bv, ESFarray_Bv] = GetESF(dataBv, comBv, direction, capacity_Bv);
 
+% Знаходимо LSF - функцію розсіювання лінії, це диференціал від ESF
+% LSF(x) = d(ESF(x))/dx
+LSF_Rh = diff(ESF_Rh);
+LSF_Gh = diff(ESF_Gh);
+LSF_Bh = diff(ESF_Bh);
 
+LSF_Rv = diff(ESF_Rv);
+LSF_Gv = diff(ESF_Gv);
+LSF_Bv = diff(ESF_Bv);
+
+% Graphics - present result
+
+% Горизонтальний патерн
+figure('Name','Calculate MTF for R chanel and horizontal',...
+    'NumberTitle','off');
+PresentInfo(dataRh, comRh, ESF_Rh, ESFarray_Rh, LSF_Rh);
+figure('Name','Calculate MTF for G chanel and horizontal',...
+    'NumberTitle','off');
+PresentInfo(dataGh, comGh, ESF_Gh, ESFarray_Gh, LSF_Gh);
+figure('Name','Calculate MTF for B chanel and horizontal',...
+    'NumberTitle','off');
+PresentInfo(dataBh, comBh, ESF_Bh, ESFarray_Bh, LSF_Bh);
+
+% Вертикальний патерн
+figure('Name','Calculate MTF for R chanel and vertical',...
+    'NumberTitle','off');
+PresentInfo(dataRv, comRv, ESF_Rv, ESFarray_Rv, LSF_Rv);
+figure('Name','Calculate MTF for G chanel and vertical',...
+    'NumberTitle','off');
+PresentInfo(dataGv, comGv, ESF_Gv, ESFarray_Gv, LSF_Gv);
+figure('Name','Calculate MTF for B chanel and vertical',...
+    'NumberTitle','off');
+PresentInfo(dataBv, comBv, ESF_Bv, ESFarray_Bv, LSF_Bv);
+
+% Present different beatween chanels
+% figure(1);
+% hold on;
+% plot(ESF_R);
+% plot(ESF_G);
+% plot(ESF_B);
+% 
+% figure(2);
+% hold on;
+% plot(LSF_R);
+% plot(LSF_G);
+% plot(LSF_B);
+
+clear direction dataRh dataGh dataBh dataRv dataGv dataBv comRh comGh comBh...
+    comRv comGv comBv ESFarray_Rh ESFarray_Gh ESFarray_Bh ESFarray_Rv...
+    ESFarray_Gv ESFarray_Bv capacity_Rh capacity_Gh capacity_Bh...
+    capacity_Rv capacity_Gv capacity_Bv; 
+
+clear ESF_Rh ESF_Gh ESF_Bh ESF_Rv ESF_Gv ESF_Bv...
+    LSF_Rh LSF_Gh LSF_Bh LSF_Rv LSF_Gv LSF_Bv 

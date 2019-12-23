@@ -1,4 +1,4 @@
-function [ESF] = GetESF(data, center, direction, length)
+function [ESF, array] = GetESF(data, center, direction, length)
 % Отримання функції розсіювання краю
 % data - частина даних зображення
 % center - центр мас кожноъ ESF в рядку
@@ -48,15 +48,18 @@ end
 % отримуємо спільну ESF, де кожна точка є мат-сподіванням
 ESF = mean(array);
 
+% нормуємо значення
+array = array ./  255;
+ESF = ESF ./ 255;
+
 % for analysis information
-figure(1);
-clf;
-hold on;
-for i = 1 : size(array, 1)
-    plot(array(i, :), '.');
-    pause(1/250);
-end
-plot(array(i, :), 'LineWidth', 3);
+% figure(1);
+% clf;
+% hold on;
+% for i = 1 : size(array, 1)
+%     plot(array(i, :), '.');
+%     pause(1/250);
+% end
+% plot(ESF, 'LineWidth', 3);
 
 end
-
