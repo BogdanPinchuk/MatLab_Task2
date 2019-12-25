@@ -52,14 +52,4 @@ ESF = mean(array);
 array = array ./  255;
 ESF = ESF ./ 255;
 
-% for analysis information
-% figure(1);
-% clf;
-% hold on;
-% for i = 1 : size(array, 1)
-%     plot(array(i, :), '.');
-%     pause(1/250);
-% end
-% plot(ESF, 'LineWidth', 3);
-
 end

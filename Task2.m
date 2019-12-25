@@ -14,9 +14,7 @@ picture = imread('picture.jpg');
 
 % Size
 % heigth - висота
-% width - ширина
-% chanels - кількість каналів (3 - RGB)
-[height, width, chanels] = size(picture);
+height = size(picture, 1);
 
 % for help
 % 2013 - Evaluation of Major Factors Affecting Spatial Resolution of Gamma-Rays Camera
@@ -27,10 +25,6 @@ picture = imread('picture.jpg');
 % https://en.wikipedia.org/wiki/Optical_transfer_function
 
 % dapic - data of picture
-
-%%%%%%
-% First calculate
-%%%%%%
 % 1 - Right pattern
 dapic(1, 1) = {'Horizontal'};
 dapic(1, 2) = {[height - 2182, 3166; height - 1538, 3388]};
@@ -39,13 +33,6 @@ dapic(2, 1) = {'Vertical'};
 dapic(2, 2) = {[height - 1482, 2469; height - 1261, 3115]};
 
 clear height width chanels;
-
-% show pacher
-% i = 1;
-% patcher0 = picture(dapic{i, 2}(1, 1) : dapic{i, 2}(2, 1),...
-%     dapic{i, 2}(1, 2) : dapic{i, 2}(2, 2), :);
-% imshow(patcher0);
-% image(patcher0);
 
 % находимо центр мас для рожного із рядків
 i = 1;
@@ -127,48 +114,51 @@ LSF_Bv = GetLSF(ESF_Bv);
 % Розраховуємо MTF - модуляційну передавальну функцію
 % 2006 - Гонсалес Р., Вудс Р., Эддинс С. Цифровая обработка изображений в 
 % среде MATLAB - розрахунок Фур'є перетворення
-MTF_Rh = GetMTF(LSF_Rh);
-MTF_Gh = GetMTF(LSF_Gh);
-MTF_Bh = GetMTF(LSF_Bh);
+[MTF_Rh, f_Rh] = GetMTF(LSF_Rh);
+[MTF_Gh, f_Gh] = GetMTF(LSF_Gh);
+[MTF_Bh, f_Bh] = GetMTF(LSF_Bh);
 
-MTF_Rv = GetMTF(LSF_Rv);
-MTF_Gv = GetMTF(LSF_Gv);
-MTF_Bv = GetMTF(LSF_Bv);
+[MTF_Rv, f_Rv] = GetMTF(LSF_Rv);
+[MTF_Gv, f_Gv] = GetMTF(LSF_Gv);
+[MTF_Bv, f_Bv] = GetMTF(LSF_Bv);
 
 % Graphics - present result
 
 % Горизонтальний патерн
 figure('Name','Calculate MTF for R chanel and horizontal',...
     'NumberTitle','off');
-PresentInfo(dataRh, comRh, ESF_Rh, ESFarray_Rh, LSF_Rh, MTF_Rh);
+PresentInfo(dataRh, comRh, ESF_Rh, ESFarray_Rh, LSF_Rh, MTF_Rh, f_Rh);
 figure('Name','Calculate MTF for G chanel and horizontal',...
     'NumberTitle','off');
-PresentInfo(dataGh, comGh, ESF_Gh, ESFarray_Gh, LSF_Gh, MTF_Gh);
+PresentInfo(dataGh, comGh, ESF_Gh, ESFarray_Gh, LSF_Gh, MTF_Gh, f_Gh);
 figure('Name','Calculate MTF for B chanel and horizontal',...
     'NumberTitle','off');
-PresentInfo(dataBh, comBh, ESF_Bh, ESFarray_Bh, LSF_Bh, MTF_Bh);
+PresentInfo(dataBh, comBh, ESF_Bh, ESFarray_Bh, LSF_Bh, MTF_Bh, f_Bh);
 
 % Вертикальний патерн
 figure('Name','Calculate MTF for R chanel and vertical',...
     'NumberTitle','off');
-PresentInfo(dataRv, comRv, ESF_Rv, ESFarray_Rv, LSF_Rv, MTF_Rv);
+PresentInfo(dataRv, comRv, ESF_Rv, ESFarray_Rv, LSF_Rv, MTF_Rv, f_Rv);
 figure('Name','Calculate MTF for G chanel and vertical',...
     'NumberTitle','off');
-PresentInfo(dataGv, comGv, ESF_Gv, ESFarray_Gv, LSF_Gv, MTF_Gv);
+PresentInfo(dataGv, comGv, ESF_Gv, ESFarray_Gv, LSF_Gv, MTF_Gv, f_Gv);
 figure('Name','Calculate MTF for B chanel and vertical',...
     'NumberTitle','off');
-PresentInfo(dataBv, comBv, ESF_Bv, ESFarray_Bv, LSF_Bv, MTF_Bv);
+PresentInfo(dataBv, comBv, ESF_Bv, ESFarray_Bv, LSF_Bv, MTF_Bv, f_Bv);
 
 % Present different between chanels
 % Це можна представити у вигляді 3-х кривих на одному графіку, але краще
 % показати це через відхилення
 % PresentDiff(ESF_Rh, ESF_Gh, ESF_Bh, ESF_Rv, ESF_Gv, ESF_Bv,...
-%     LSF_Rh, LSF_Gh, LSF_Bh, LSF_Rv, LSF_Gv, LSF_Bv);
+%     LSF_Rh, LSF_Gh, LSF_Bh, LSF_Rv, LSF_Gv, LSF_Bv,...
+%     MTF_Rh, MTF_Gh, MTF_Bh, MTF_Rv, MTF_Gv, MTF_Bv);
 
 clear direction dataRh dataGh dataBh dataRv dataGv dataBv comRh comGh comBh...
     comRv comGv comBv ESFarray_Rh ESFarray_Gh ESFarray_Bh ESFarray_Rv...
     ESFarray_Gv ESFarray_Bv capacity_Rh capacity_Gh capacity_Bh...
     capacity_Rv capacity_Gv capacity_Bv; 
 
-% clear ESF_Rh ESF_Gh ESF_Bh ESF_Rv ESF_Gv ESF_Bv...
-%     LSF_Rh LSF_Gh LSF_Bh LSF_Rv LSF_Gv LSF_Bv 
+clear ESF_Rh ESF_Gh ESF_Bh ESF_Rv ESF_Gv ESF_Bv...
+    LSF_Rh LSF_Gh LSF_Bh LSF_Rv LSF_Gv LSF_Bv...
+    MTF_Rh MTF_Gh MTF_Bh MTF_Rv MTF_Gv MTF_Bv...
+    f_Rh f_Gh f_Bh f_Rv f_Gv f_Bv;

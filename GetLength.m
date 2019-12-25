@@ -97,14 +97,5 @@ end
 % вибираємо максимальне значення
 capacity = max(capacity);
 
-% figure(1);
-% for i = 1 : lines
-%     hold off;
-%     plot(data(i, :));
-%     hold on;
-%     plot(dataAverage(i, :), 'LineWidth', 3);
-%     pause(1/250);
-% end
-
 end
 

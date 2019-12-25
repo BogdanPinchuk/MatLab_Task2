@@ -1,5 +1,6 @@
 function PresentDiff(ESF_Rh, ESF_Gh, ESF_Bh, ESF_Rv, ESF_Gv, ESF_Bv,...
-    LSF_Rh, LSF_Gh, LSF_Bh, LSF_Rv, LSF_Gv, LSF_Bv)
+    LSF_Rh, LSF_Gh, LSF_Bh, LSF_Rv, LSF_Gv, LSF_Bv,...
+    MTF_Rh, MTF_Gh, MTF_Bh, MTF_Rv, MTF_Gv, MTF_Bv)
 % Презентація відмінності між каналами
 % за допомогою: ESF, LSF, MTF
 
@@ -43,5 +44,24 @@ xlim([1 max(size(RMS_LSF_h, 2), size(RMS_LSF_v, 2))]);
 
 clear LSF_h LSF_v RMS_LSF_h RMS_LSF_v; 
 
-end
+% Відображення відмінності на модуляцыйних передавальних функціях
+figure('Name','MTF show different between chanels',...
+    'NumberTitle','off');
+MTF_h = [MTF_Rh; MTF_Gh; MTF_Bh];
+MTF_v = [MTF_Rv; MTF_Gv; MTF_Bv];
+RMS_MTF_h = std(MTF_h, 1);
+RMS_MTF_v = std(MTF_v, 1);
+hold on;
+grid on;
+plot(RMS_MTF_h, 'LineWidth', 2, 'DisplayName', 'horizontal');
+plot(RMS_MTF_v, 'LineWidth', 2, 'DisplayName', 'vertical');
+legend('show');
 
+title('MTF: RMS for RGB chanel');
+xlabel('Pixels^-^1');
+ylabel('Contrast');
+xlim([1 max(size(RMS_MTF_h, 2), size(RMS_MTF_v, 2))]);
+
+clear MTF_h MTF_v RMS_MTF_h RMS_MTF_v; 
+
+end

@@ -1,10 +1,12 @@
-function PresentInfo(data, com, ESF, ESFarray, LSF, MTF)
+function PresentInfo(data, com, ESF, ESFarray, LSF, MTF, f)
 % Презентація інформації на графіку
 % data - дані зображення
 % com - центр мас або координати розташування сходинки
 % ESF - крайова функція або функція краю
 % ESFarray - масив краєвих функцій з якого визначається ESF
 % LSF - функція розсіювання лінії
+% MTF - модуляційна передавальна функція
+% f - частота, роздільна здатність
 
 % Відображення результатів
 
@@ -57,9 +59,9 @@ ylabel('Intensity');
 % MTF - модуляційна передавальна функція
 subplot(2, 2, 4);
 hold on;
-plot(MTF, 'LineWidth', 2);
+plot(f, MTF, 'LineWidth', 2);
 
-xlim([1 size(MTF, 2)]);
+xlim([0 max(f)]);
 ylim([0 1]);
 
 yticks(0 : 0.2 : 1);
@@ -67,7 +69,7 @@ yticks(0 : 0.2 : 1);
 grid on;
 
 title('MTF');
-xlabel('Pixels^-^1');
+xlabel('lw/ph');
 ylabel('Contrast');
 
 end
