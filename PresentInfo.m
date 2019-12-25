@@ -1,4 +1,4 @@
-function PresentInfo(data, com, ESF, ESFarray, LSF)
+function PresentInfo(data, com, ESF, ESFarray, LSF, MTF)
 % Презентація інформації на графіку
 % data - дані зображення
 % com - центр мас або координати розташування сходинки
@@ -7,8 +7,8 @@ function PresentInfo(data, com, ESF, ESFarray, LSF)
 % LSF - функція розсіювання лінії
 
 % Відображення результатів
-% figure(1);
-% частина зображення, яке аналізується
+
+% Частина зображення, яке аналізується
 subplot(2, 2, 1);
 hold off;
 imshow(data);
@@ -17,6 +17,7 @@ plot(com(1, :), com(2, :), 'r', 'LineWidth', 2);
 
 title('Pattern');
 
+% ESF - крайова функція
 subplot(2, 2, 2);
 hold on;
 for i = 1 : size(ESFarray, 1)
@@ -37,12 +38,13 @@ title('ESF');
 xlabel('Pixels');
 ylabel('Intensity');
 
+% LSF - функція розсіювання лінії
 subplot(2, 2, 3);
 hold on;
 plot(LSF, 'LineWidth', 2);
 
 xlim([1 size(LSF, 2)]);
-% ylim([0 max(LSF)]);
+ylim([0 1]);
 
 yticks(0 : 0.2 : 1);
 
@@ -51,6 +53,22 @@ grid on;
 title('LSF');
 xlabel('Pixels');
 ylabel('Intensity');
+
+% MTF - модуляційна передавальна функція
+subplot(2, 2, 4);
+hold on;
+plot(MTF, 'LineWidth', 2);
+
+xlim([1 size(MTF, 2)]);
+ylim([0 1]);
+
+yticks(0 : 0.2 : 1);
+
+grid on;
+
+title('MTF');
+xlabel('Pixels^-^1');
+ylabel('Contrast');
 
 end
 

@@ -66,10 +66,10 @@ dataBv = data(:, :, 3);
 
 clear dapic data i;
 
-% зазвичай в зображеннях створених вручну, RGB комоненти по інтенсивності
+% зазвичай в зображеннях, які створені вручну, RGB комоненти по інтенсивності
 % рівні, але так як знімала реальна камера, то можливі варіації (вплив
-% шумів) тобто в чб ці компоненти відрізнятимуться, тому можна взяти якесь
-% значення - наприклад, середнє аврифметичне і т.д.
+% шумів, або хроматизму) тобто в чб ці компоненти відрізнятимуться, тому 
+% можна взяти якесь значення - наприклад, середнє аврифметичне і т.д.
 % але можна обрахувати і порівняти 3 компоненти між собою, що покаже як
 % впливає на результуюче зображення кожен із фільтів, або покаже вплив
 % довжини хвилі на МПФ, дана тема потребує дослідження...
@@ -88,15 +88,20 @@ comBv = CenterOfMass(dataBv, direction);
 
 % знаходимо необхідну емність - кількість пікселів за яими можна описати
 % ESF (крайову функцію)
+win = 25;
+noise = 5;
+
 direction = 'h';
-capacity_Rh = GetLength(dataRh, direction, 25, 5);
-capacity_Gh = GetLength(dataGh, direction, 25, 5);
-capacity_Bh = GetLength(dataBh, direction, 25, 5);
+capacity_Rh = GetLength(dataRh, direction, win, noise);
+capacity_Gh = GetLength(dataGh, direction, win, noise);
+capacity_Bh = GetLength(dataBh, direction, win, noise);
 
 direction = 'v';
-capacity_Rv = GetLength(dataRv, direction, 25, 5);
-capacity_Gv = GetLength(dataGv, direction, 25, 5);
-capacity_Bv = GetLength(dataBv, direction, 25, 5);
+capacity_Rv = GetLength(dataRv, direction, win, noise);
+capacity_Gv = GetLength(dataGv, direction, win, noise);
+capacity_Bv = GetLength(dataBv, direction, win, noise);
+
+clear win noise;
 
 % Знаходимо крайову функцію
 direction = 'h';
@@ -111,44 +116,48 @@ direction = 'v';
 
 % Знаходимо LSF - функцію розсіювання лінії, це диференціал від ESF
 % LSF(x) = d(ESF(x))/dx
-LSF_Rh = diff(ESF_Rh);
-LSF_Gh = diff(ESF_Gh);
-LSF_Bh = diff(ESF_Bh);
+LSF_Rh = GetLSF(ESF_Rh);
+LSF_Gh = GetLSF(ESF_Gh);
+LSF_Bh = GetLSF(ESF_Bh);
 
-LSF_Rv = diff(ESF_Rv);
-LSF_Gv = diff(ESF_Gv);
-LSF_Bv = diff(ESF_Bv);
+LSF_Rv = GetLSF(ESF_Rv);
+LSF_Gv = GetLSF(ESF_Gv);
+LSF_Bv = GetLSF(ESF_Bv);
 
 % Розраховуємо MTF - модуляційну передавальну функцію
-% 2006 - Гонсалес Р., Вудс Р., Эддинс С. Цифровая обработка изображений в среде MATLAB
-MTF_Rh = abs(fft(LSF_Rh));
+% 2006 - Гонсалес Р., Вудс Р., Эддинс С. Цифровая обработка изображений в 
+% среде MATLAB - розрахунок Фур'є перетворення
+MTF_Rh = GetMTF(LSF_Rh);
+MTF_Gh = GetMTF(LSF_Gh);
+MTF_Bh = GetMTF(LSF_Bh);
 
-f = 1 : fix(size(MTF_Rh, 2)/ 2) + 1;
-plot(f - 1, MTF_Rh(f));
+MTF_Rv = GetMTF(LSF_Rv);
+MTF_Gv = GetMTF(LSF_Gv);
+MTF_Bv = GetMTF(LSF_Bv);
 
 % Graphics - present result
 
-% % Горизонтальний патерн
-% figure('Name','Calculate MTF for R chanel and horizontal',...
-%     'NumberTitle','off');
-% PresentInfo(dataRh, comRh, ESF_Rh, ESFarray_Rh, LSF_Rh);
-% figure('Name','Calculate MTF for G chanel and horizontal',...
-%     'NumberTitle','off');
-% PresentInfo(dataGh, comGh, ESF_Gh, ESFarray_Gh, LSF_Gh);
-% figure('Name','Calculate MTF for B chanel and horizontal',...
-%     'NumberTitle','off');
-% PresentInfo(dataBh, comBh, ESF_Bh, ESFarray_Bh, LSF_Bh);
-% 
-% % Вертикальний патерн
-% figure('Name','Calculate MTF for R chanel and vertical',...
-%     'NumberTitle','off');
-% PresentInfo(dataRv, comRv, ESF_Rv, ESFarray_Rv, LSF_Rv);
-% figure('Name','Calculate MTF for G chanel and vertical',...
-%     'NumberTitle','off');
-% PresentInfo(dataGv, comGv, ESF_Gv, ESFarray_Gv, LSF_Gv);
-% figure('Name','Calculate MTF for B chanel and vertical',...
-%     'NumberTitle','off');
-% PresentInfo(dataBv, comBv, ESF_Bv, ESFarray_Bv, LSF_Bv);
+% Горизонтальний патерн
+figure('Name','Calculate MTF for R chanel and horizontal',...
+    'NumberTitle','off');
+PresentInfo(dataRh, comRh, ESF_Rh, ESFarray_Rh, LSF_Rh, MTF_Rh);
+figure('Name','Calculate MTF for G chanel and horizontal',...
+    'NumberTitle','off');
+PresentInfo(dataGh, comGh, ESF_Gh, ESFarray_Gh, LSF_Gh, MTF_Gh);
+figure('Name','Calculate MTF for B chanel and horizontal',...
+    'NumberTitle','off');
+PresentInfo(dataBh, comBh, ESF_Bh, ESFarray_Bh, LSF_Bh, MTF_Bh);
+
+% Вертикальний патерн
+figure('Name','Calculate MTF for R chanel and vertical',...
+    'NumberTitle','off');
+PresentInfo(dataRv, comRv, ESF_Rv, ESFarray_Rv, LSF_Rv, MTF_Rv);
+figure('Name','Calculate MTF for G chanel and vertical',...
+    'NumberTitle','off');
+PresentInfo(dataGv, comGv, ESF_Gv, ESFarray_Gv, LSF_Gv, MTF_Gv);
+figure('Name','Calculate MTF for B chanel and vertical',...
+    'NumberTitle','off');
+PresentInfo(dataBv, comBv, ESF_Bv, ESFarray_Bv, LSF_Bv, MTF_Bv);
 
 % Present different between chanels
 % Це можна представити у вигляді 3-х кривих на одному графіку, але краще

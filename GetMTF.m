@@ -1,8 +1,7 @@
 function [MTF] = GetMTF(LSF)
 %Отримання МПФ
 % LSF - функція розсіювання лінії
-
-LSF = LSF_Rh;
+% MTF - модуляційна пеердавальна функція
 
 % Отримаємо МПФ
 MTF = abs(fft(LSF));
@@ -14,8 +13,9 @@ MTF = MTF(f);
 % Нормуємо МПФ
 MTF = MTF / max(MTF);
 
-plot(f - 1, MTF);
-grid on;
+% plot(f - 1, MTF);
+% grid on;
+% ylim([0 1]);
 
 end
 
