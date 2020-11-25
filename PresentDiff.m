@@ -1,10 +1,10 @@
 function PresentDiff(ESF_Rh, ESF_Gh, ESF_Bh, ESF_Rv, ESF_Gv, ESF_Bv,...
     LSF_Rh, LSF_Gh, LSF_Bh, LSF_Rv, LSF_Gv, LSF_Bv,...
     MTF_Rh, MTF_Gh, MTF_Bh, MTF_Rv, MTF_Gv, MTF_Bv)
-% Презентація відмінності між каналами
-% за допомогою: ESF, LSF, MTF
+% РџСЂРµР·РµРЅС‚Р°С†С–СЏ РІС–РґРјС–РЅРЅРѕСЃС‚С– РјС–Р¶ РєР°РЅР°Р»Р°РјРё
+% Р·Р° РґРѕРїРѕРјРѕРіРѕСЋ: ESF, LSF, MTF
 
-% Відображення відмінності на крайових функціях
+% Р’С–РґРѕР±СЂР°Р¶РµРЅРЅСЏ РІС–РґРјС–РЅРЅРѕСЃС‚С– РЅР° РєСЂР°Р№РѕРІРёС… С„СѓРЅРєС†С–СЏС…
 figure('Name','ESF show different between chanels',...
     'NumberTitle','off');
 ESF_h = [ESF_Rh; ESF_Gh; ESF_Bh];
@@ -24,7 +24,7 @@ xlim([1 max(size(RMS_ESF_h, 2), size(RMS_ESF_v, 2))]);
 
 clear ESF_h ESF_v RMS_ESF_h RMS_ESF_v; 
 
-% Відображення відмінності на функціях розсіювання лінії
+% Р’С–РґРѕР±СЂР°Р¶РµРЅРЅСЏ РІС–РґРјС–РЅРЅРѕСЃС‚С– РЅР° С„СѓРЅРєС†С–СЏС… СЂРѕР·СЃС–СЋРІР°РЅРЅСЏ Р»С–РЅС–С—
 figure('Name','LSF show different between chanels',...
     'NumberTitle','off');
 LSF_h = [LSF_Rh; LSF_Gh; LSF_Bh];
@@ -44,7 +44,7 @@ xlim([1 max(size(RMS_LSF_h, 2), size(RMS_LSF_v, 2))]);
 
 clear LSF_h LSF_v RMS_LSF_h RMS_LSF_v; 
 
-% Відображення відмінності на модуляцыйних передавальних функціях
+% Р’С–РґРѕР±СЂР°Р¶РµРЅРЅСЏ РІС–РґРјС–РЅРЅРѕСЃС‚С– РЅР° РјРѕРґСѓР»СЏС†С‹Р№РЅРёС… РїРµСЂРµРґР°РІР°Р»СЊРЅРёС… С„СѓРЅРєС†С–СЏС…
 figure('Name','MTF show different between chanels',...
     'NumberTitle','off');
 MTF_h = [MTF_Rh; MTF_Gh; MTF_Bh];
